@@ -1,0 +1,1 @@
+![Version](https://img.shields.io/github/package-json/v/aseprano/buraco_tables) ![Build](https://img.shields.io/travis/aseprano/buraco_tables) [![Coverage Status](https://img.shields.io/coveralls/github/aseprano/buraco_tables/master)](https://coveralls.io/github/aseprano/buraco_tables?branch=master)
