@@ -1,8 +1,10 @@
 import { RouteDeclarations } from '@darkbyte/herr';
-import { TestAction } from "../actions/TestAction";
+import { ListTablesAction } from '../actions/ListTablesAction';
+import { CreateTableAction } from '../actions/CreateTableAction';
 
 const routes: RouteDeclarations = {
-    'GET /test': TestAction,
+    'GET /tables':  ListTablesAction,
+    'POST /tables': CreateTableAction,
 };
 
 export { routes };

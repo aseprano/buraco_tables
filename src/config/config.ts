@@ -40,7 +40,7 @@ export default {
         vhost: process.env.RABBITMQ_VHOST || 'burraco',
         inputExchange: process.env.RABBITMQ_IN_EXCH || 'events',
         outputExchange: process.env.RABBITMQ_OUT_EXCH || 'events',
-        inputQueue: process.env.RABBITMQ_IN_QUEUE || 'matches-queue',
+        inputQueue: process.env.RABBITMQ_IN_QUEUE || 'tables-queue',
     },
     db: {
         host: process.env.DB_HOST || 'localhost',
