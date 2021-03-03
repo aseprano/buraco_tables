@@ -1,9 +1,9 @@
 import {
     Injectable,
     ApiResponse,
-    Context,
-    MicroserviceApiResponse, AbstractQueryAction,
+    MicroserviceApiResponse, AbstractQueryAction, Context,
 } from '@darkbyte/herr';
+
 import e from 'express';
 
 @Injectable()
