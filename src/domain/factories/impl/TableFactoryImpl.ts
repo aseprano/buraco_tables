@@ -13,6 +13,10 @@ export class TableFactoryImpl extends TableFactory {
         super();
     }
 
+    public createEmpty(): Table {
+        return new TableImpl();
+    }
+
     public async createTable(name: TableName): Promise<Table> {
         return this.idGenerator
             .generate()

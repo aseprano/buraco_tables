@@ -25,7 +25,12 @@ export class TablesManagementServiceImpl extends TablesManagementService {
     }
 
     public async delete(tableId: TableID): Promise<void> {
-        throw new Error('Method not implemented.');
+        return this.tablesRepository
+            .getById(tableId)
+            .then((table) => {
+                table.close();
+                this.tablesRepository.save(table);
+            });
     }
 
 }

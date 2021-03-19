@@ -27,7 +27,7 @@
     "url": "git+ssh://git@github.com/aseprano/buraco_tables.git"
   },
   "dependencies": {
-    "@darkbyte/herr": "^0.32.0",
+    "@darkbyte/herr": "^0.32",
     "body-parser": "^1.19.0",
     "uuidv4": "^6.2.6"
   },

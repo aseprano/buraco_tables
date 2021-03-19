@@ -3,6 +3,7 @@ import { TableInitialized } from '../../events/TableInitialized';
 import { TableID } from '../../value_objects/TableID';
 import { TableName } from '../../value_objects/TableName';
 import { Table } from '../Table';
+import { TableClosed } from '../../events/TableClosed';
 
 export class TableImpl extends AbstractRootEntity implements Table {
     private id?: TableID;
@@ -28,11 +29,19 @@ export class TableImpl extends AbstractRootEntity implements Table {
     private handleTableInitializedEvent(event: Event) {
         this.id = new TableID(event.getPayload()['id'] as number);
     }
-    
+
+    private handleTableClosedEvent(event: Event) {
+        this.markDeleted();
+    }
+
     protected doApplyEvent(event: Event): void {
         switch (event.getName()) {
             case TableInitialized.EventName:
                 this.handleTableInitializedEvent(event);
+                break;
+
+            case TableClosed.EventName:
+                this.handleTableClosedEvent(event);
                 break;
         }
     }
@@ -41,12 +50,14 @@ export class TableImpl extends AbstractRootEntity implements Table {
         this.appendUncommittedEvent(new TableInitialized(id, name.asString()));
     }
 
-    public canBeDeleted(): boolean {
-        return true;
-    }
-
     public getId(): TableID {
         return this.id!;
+    }
+
+    public close() {
+        this.appendUncommittedEvent(
+            new TableClosed(this.id!.asNumber())
+        );
     }
 
 } 
