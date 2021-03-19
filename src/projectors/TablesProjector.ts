@@ -1,5 +1,6 @@
 import { AbstractProjector, IncomingEvent, Injectable, Queryable } from '@darkbyte/herr';
 import { TableInitialized } from '../domain/events/TableInitialized';
+import { TableClosed } from '../domain/events/TableClosed';
 
 @Injectable()
 export class TablesProjector extends AbstractProjector {
@@ -21,6 +22,16 @@ export class TablesProjector extends AbstractProjector {
             ).then(() => {});
     }
 
+    private async handleTableClosed(event: IncomingEvent): Promise<void> {
+        return this.getConnection()
+            .query(
+                'DELETE FROM tables WHERE id = :tableId',
+                {
+                    tableId: event.getPayload()['id']
+                }
+            ).then(() => undefined);
+    }
+
     public getId(): string {
         return 'com.herrdoktor.buraco.games.projectors.GamesProjector';
     }
@@ -28,6 +39,7 @@ export class TablesProjector extends AbstractProjector {
     public getEventsOfInterest(): Array<string> {
         return [
             TableInitialized.EventName,
+            TableClosed.EventName,
         ];
     }
 
@@ -35,6 +47,9 @@ export class TablesProjector extends AbstractProjector {
         switch (event.getName()) {
             case TableInitialized.EventName:
                 return this.handleTableInitialized(event);
+
+            case TableClosed.EventName:
+                return this.handleTableClosed(event);
         }
     }
 
