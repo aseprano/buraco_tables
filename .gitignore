@@ -1,5 +1,6 @@
 node_modules/
 build/
 .nyc_output/
+.idea/
 test.ts
 package-lock.json
