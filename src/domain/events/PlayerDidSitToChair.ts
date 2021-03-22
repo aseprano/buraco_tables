@@ -4,7 +4,7 @@ import { DomainEvent } from './DomainEvent';
 
 const EventName = 'com.herrdoktor.buraco.events.PlayerSitToChair';
 
-export class PlayerSitToChairEvent extends DomainEvent{
+export class PlayerDidSitToChair extends DomainEvent{
     public static readonly EventName = EventName;
 
     constructor(
@@ -15,7 +15,7 @@ export class PlayerSitToChairEvent extends DomainEvent{
 
         this.setPayload({
             id: chair.getTableID().asNumber(),
-            player: player.asString(),
+            playerId: player.asString(),
             chairId: chair.asNumber(),
         });
     }
