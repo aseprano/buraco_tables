@@ -13,4 +13,9 @@ export class PlayerID {
     public asString(): string {
         return this.id;
     }
+
+    public isEqualTo(other: PlayerID): boolean {
+        return this === other || this.id === other.id;
+    }
+
 }

@@ -12,4 +12,14 @@ describe('PlayerID', () => {
         expect(playerId.asString()).toEqual('darkbyte');
     });
 
+    it('is equal to itself or to an object with the same value', () => {
+        const playerId = new PlayerID('darkbyte');
+        expect(playerId.isEqualTo(playerId)).toBeTrue();
+        expect(playerId.isEqualTo(new PlayerID('darkbyte'))).toBeTrue();
+    })
+
+    it('is not equal to another object with different value', () => {
+        expect(new PlayerID('darkbyte').isEqualTo(new PlayerID('darkbytes'))).toBeFalse();
+    })
+
 });
