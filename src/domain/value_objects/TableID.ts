@@ -14,4 +14,8 @@ export class TableID {
         return this.id;
     }
 
+    public isEqualTo(other: TableID): boolean {
+        return this === other || this.id === other.id;
+    }
+
 }
