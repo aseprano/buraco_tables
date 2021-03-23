@@ -1,4 +1,4 @@
-import { PlayerDidSitToChair } from '../../src/domain/events/PlayerDidSitToChair';
+import { PlayerSatToChair } from '../../src/domain/events/PlayerSatToChair';
 import { PlayerID } from '../../src/domain/value_objects/PlayerID';
 import { ChairID } from '../../src/domain/value_objects/ChairID';
 import { TableID } from '../../src/domain/value_objects/TableID';
@@ -6,14 +6,14 @@ import { TableID } from '../../src/domain/value_objects/TableID';
 describe('PlayerSitToChairEvent', () => {
 
     it('has the proper data', () => {
-        expect(PlayerDidSitToChair.EventName).toEqual('com.herrdoktor.buraco.events.PlayerSitToChair');
+        expect(PlayerSatToChair.EventName).toEqual('com.herrdoktor.buraco.events.PlayerSatToChair');
 
-        const event = new PlayerDidSitToChair(
+        const event = new PlayerSatToChair(
             new PlayerID('darkbyte'),
             new ChairID(2, new TableID(123)),
         );
 
-        expect(event.getName()).toEqual(PlayerDidSitToChair.EventName);
+        expect(event.getName()).toEqual(PlayerSatToChair.EventName);
         expect(event.getPayload()).toEqual({
             id: 123,
             chairId: 2,

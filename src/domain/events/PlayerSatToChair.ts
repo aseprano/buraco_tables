@@ -2,9 +2,9 @@ import { ChairID } from '../value_objects/ChairID';
 import { PlayerID } from '../value_objects/PlayerID';
 import { DomainEvent } from './DomainEvent';
 
-const EventName = 'com.herrdoktor.buraco.events.PlayerSitToChair';
+const EventName = 'com.herrdoktor.buraco.events.PlayerSatToChair';
 
-export class PlayerDidSitToChair extends DomainEvent{
+export class PlayerSatToChair extends DomainEvent{
     public static readonly EventName = EventName;
 
     constructor(
