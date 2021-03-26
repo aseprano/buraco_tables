@@ -1,10 +1,10 @@
 import { DomainEvent } from './DomainEvent';
 import { TableID } from '../value_objects/TableID';
 
-const EventName = 'com.herrdoktor.buraco.events.TableClosed';
+const EventName = 'com.herrdoktor.buraco.events.TableReopened';
 
-export class TableClosed extends DomainEvent {
-    static readonly EventName = EventName;
+export class TableReopened extends DomainEvent {
+    public static readonly EventName = EventName;
 
     constructor(
         tableId: TableID
@@ -19,5 +19,4 @@ export class TableClosed extends DomainEvent {
     public getName(): string {
         return EventName;
     }
-
 }
