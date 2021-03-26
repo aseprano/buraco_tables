@@ -3,6 +3,7 @@ import { FakeAuthService } from '@darkbyte/herr';
 import { TablesManagementServiceImpl } from '../domain/app_services/impl/TablesManagementServiceImpl';
 import { TableFactoryImpl } from '../domain/factories/impl/TableFactoryImpl';
 import { TablesRepositoryImpl } from '../domain/repositories/impl/TablesRepositoryImpl';
+import { ChairFactoryImpl } from '../domain/factories/impl/ChairFactoryImpl';
 
 const singletons: FactoriesList = {
     AuthService: () => {
@@ -20,6 +21,7 @@ const singletons: FactoriesList = {
     TableFactory: TableFactoryImpl,
     TablesRepository: TablesRepositoryImpl,
     TablesManagementService: TablesManagementServiceImpl,
+    ChairFactory: ChairFactoryImpl,
 }
 
 const transients: FactoriesList = {
