@@ -5,6 +5,8 @@ import { PlayerID } from '../../src/domain/value_objects/PlayerID';
 import { PlayerSatToChair } from '../../src/domain/events/PlayerSatToChair';
 import { ChairNotAvailableException } from '../../src/domain/exceptions/ChairNotAvailableException';
 import { PlayerLeftChair } from '../../src/domain/events/PlayerLeftChair';
+import { TableOccupied } from '../../src/domain/events/TableOccupied';
+import { GamePolicySpecification, TYPE_ROUNDS } from '../../src/domain/value_objects/GamePolicySpecification';
 
 describe('ChairImpl', () => {
 
@@ -100,6 +102,36 @@ describe('ChairImpl', () => {
         chair.applyEvent(new PlayerSatToChair(new PlayerID('mike'), new ChairID(1, new TableID(123))));
         chair.applyEvent(new PlayerLeftChair(new PlayerID('john'), new ChairID(1, new TableID(123))));
         expect(chair.getCurrentPlayer()).toEqual(new PlayerID('mike'));
+    });
+
+    it('sets the player when table is occupied and chair id is zero', () => {
+        const chair = createChair(0, 123);
+
+        chair.applyEvent(
+            new TableOccupied(
+                new TableID(123),
+                new PlayerID('mike'),
+                4,
+                new GamePolicySpecification(TYPE_ROUNDS, 3),
+            )
+        );
+
+        expect(chair.getCurrentPlayer()).toEqual(new PlayerID('mike'));
+    });
+
+    it('ignores the TableOccupied event if chair id is not zero', () => {
+        const chair = createChair(1, 123);
+
+        chair.applyEvent(
+            new TableOccupied(
+                new TableID(123),
+                new PlayerID('mike'),
+                4,
+                new GamePolicySpecification(TYPE_ROUNDS, 3),
+            )
+        );
+
+        expect(chair.getCurrentPlayer()).toBeUndefined();
     });
 
 });

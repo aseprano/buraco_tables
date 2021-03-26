@@ -6,6 +6,7 @@ import { ChairNotAvailableException } from '../../exceptions/ChairNotAvailableEx
 import { PlayerSatToChair } from '../../events/PlayerSatToChair';
 import { TableID } from '../../value_objects/TableID';
 import { PlayerLeftChair } from '../../events/PlayerLeftChair';
+import { TableOccupied } from '../../events/TableOccupied';
 
 export class ChairImpl extends AbstractEntity implements Chair {
     private currentPlayer?: PlayerID;
@@ -17,7 +18,7 @@ export class ChairImpl extends AbstractEntity implements Chair {
     }
 
     private eventIsAboutThisChair(event: Event): boolean {
-        const chairId = event.getPayload()['chairId'];
+        const chairId = event.getPayload()['chair'];
         const tableId = new TableID(event.getPayload()['id']);
         return this.id.isEqualTo(new ChairID(chairId, tableId));
     }
@@ -34,22 +35,32 @@ export class ChairImpl extends AbstractEntity implements Chair {
         return this.currentPlayer !== undefined && this.currentPlayer.asString() === playerId;
     }
 
+    private handleTableOccupiedEvent(event: Event): void {
+        if (this.id.asNumber() === 0) {
+            this.currentPlayer = new PlayerID(event.getPayload()['player']);
+        }
+    }
+
     private handlePlayerSatToChairEvent(event: Event): void {
         if (this.eventIsAboutThisChair(event)) {
-            this.currentPlayer = new PlayerID(event.getPayload()['playerId']);
-        } else if (this.isOccupiedBy(event.getPayload()['playerId'])) {
+            this.currentPlayer = new PlayerID(event.getPayload()['player']);
+        } else if (this.isOccupiedBy(event.getPayload()['player'])) {
             this.currentPlayer = undefined;
         }
     }
 
     private handlePlayerLeftChair(event: Event): void {
-        if (this.eventIsAboutThisChair(event) && this.isOccupiedBy(event.getPayload()['playerId'])) {
+        if (this.eventIsAboutThisChair(event) && this.isOccupiedBy(event.getPayload()['player'])) {
             this.currentPlayer = undefined;
         }
     }
 
     protected doApplyEvent(event: Event): void {
         switch (event.getName()) {
+            case TableOccupied.EventName:
+                this.handleTableOccupiedEvent(event);
+                break;
+
             case PlayerSatToChair.EventName:
                 this.handlePlayerSatToChairEvent(event);
                 break;

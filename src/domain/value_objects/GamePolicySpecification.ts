@@ -1,7 +1,7 @@
 import { InvalidGamePolicySpecificationException } from '../exceptions/InvalidGamePolicySpecificationException';
 
-const TYPE_ROUNDS = 'rounds';
-const TYPE_SCORE  = 'score';
+export const TYPE_ROUNDS = 'rounds';
+export const TYPE_SCORE  = 'score';
 
 export class GamePolicySpecification {
 
