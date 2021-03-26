@@ -15,8 +15,8 @@ export class PlayerSatToChair extends DomainEvent{
 
         this.setPayload({
             id: chair.getTableID().asNumber(),
-            playerId: player.asString(),
-            chairId: chair.asNumber(),
+            player: player.asString(),
+            chair: chair.asNumber(),
         });
     }
 

@@ -17,8 +17,8 @@ describe("PlayerLeftChair", () => {
 
         expect(event.getPayload()).toEqual({
             id: 1,
-            playerId: 'johndoe',
-            chairId: 2,
+            player: 'johndoe',
+            chair: 2,
         });
     });
 

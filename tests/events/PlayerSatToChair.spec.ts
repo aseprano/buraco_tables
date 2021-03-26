@@ -16,8 +16,8 @@ describe('PlayerSitToChairEvent', () => {
         expect(event.getName()).toEqual(PlayerSatToChair.EventName);
         expect(event.getPayload()).toEqual({
             id: 123,
-            chairId: 2,
-            playerId: 'darkbyte',
+            chair: 2,
+            player: 'darkbyte',
         });
     });
 
