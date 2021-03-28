@@ -21,10 +21,6 @@ export class ChairImpl extends AbstractEntity implements Chair {
         return this.chairNumber === chairId;
     }
 
-    private isOccupied(): boolean {
-        return this.currentPlayer !== undefined;
-    }
-
     private isOccupiedBy(playerId: PlayerID|string): boolean {
         if (playerId instanceof PlayerID) {
             return this.isOccupiedBy(playerId.asString());
@@ -87,6 +83,10 @@ export class ChairImpl extends AbstractEntity implements Chair {
         if (!this.isOccupiedBy(player)) {
             throw new ChairNotOccupiedException();
         }
+    }
+
+    public isOccupied(): boolean {
+        return this.currentPlayer !== undefined;
     }
 
 }

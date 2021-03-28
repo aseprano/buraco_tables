@@ -24,12 +24,14 @@ describe('ChairImpl', () => {
     it('is created with no occupant', () => {
         const chair = createChair();
         expect(chair.getCurrentPlayer()).toBeUndefined();
-    })
+        expect(chair.isOccupied()).toBeFalse();
+    });
 
     it('marks as occupied when the relative event is applied', () => {
         const chair = createChair(1);
         chair.applyEvent(new PlayerSatToChair(new PlayerID('john'), new ChairID(1, new TableID(111))));
         expect(chair.getCurrentPlayer()).toEqual(new PlayerID('john'));
+        expect(chair.isOccupied()).toBeTrue();
     });
 
     it('marks as free when an event says that its occupant did sit to another chair', () => {
@@ -37,6 +39,7 @@ describe('ChairImpl', () => {
         chair.applyEvent(new PlayerSatToChair(new PlayerID('john'), new ChairID(1, new TableID(111))));
         chair.applyEvent(new PlayerSatToChair(new PlayerID('john'), new ChairID(0, new TableID(111))));
         expect(chair.getCurrentPlayer()).toBeUndefined();
+        expect(chair.isOccupied()).toBeFalse();
     });
 
     it('does not remove the occupant if the applied event is not about the occupant', () => {
@@ -96,6 +99,7 @@ describe('ChairImpl', () => {
         chair.applyEvent(new PlayerSatToChair(new PlayerID('mike'), new ChairID(1, new TableID(123))));
         chair.applyEvent(new PlayerLeftChair(new PlayerID('mike'), new ChairID(1, new TableID(123))));
         expect(chair.getCurrentPlayer()).toBeUndefined();
+        expect(chair.isOccupied()).toBeFalse();
     });
 
     it('ignores the PlayerLeftChair event for different user', () => {
@@ -103,6 +107,7 @@ describe('ChairImpl', () => {
         chair.applyEvent(new PlayerSatToChair(new PlayerID('mike'), new ChairID(1, new TableID(123))));
         chair.applyEvent(new PlayerLeftChair(new PlayerID('john'), new ChairID(1, new TableID(123))));
         expect(chair.getCurrentPlayer()).toEqual(new PlayerID('mike'));
+        expect(chair.isOccupied()).toBeTrue();
     });
 
     it('sets the player when table is occupied and chair id is zero', () => {
@@ -118,6 +123,7 @@ describe('ChairImpl', () => {
         );
 
         expect(chair.getCurrentPlayer()).toEqual(new PlayerID('mike'));
+        expect(chair.isOccupied()).toBeTrue();
     });
 
     it('ignores the TableOccupied event if chair id is not zero', () => {

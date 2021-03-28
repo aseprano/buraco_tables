@@ -19,4 +19,9 @@ export interface Chair extends Entity {
      */
     getUp(player: PlayerID): void;
 
+    /**
+     * Tells whether the chair is occupied by a user or not
+     */
+    isOccupied(): boolean;
+
 }
