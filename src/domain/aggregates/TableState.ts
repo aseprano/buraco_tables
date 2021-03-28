@@ -1,13 +1,12 @@
 import { PlayerID } from '../value_objects/PlayerID';
-import { ChairID } from '../value_objects/ChairID';
 
 export interface TableState {
 
     occupy(): void;
 
-    sit(player: PlayerID, toChair: ChairID): void;
+    sit(player: PlayerID, toChair: number): void;
 
-    getUp(player: PlayerID, fromChair: ChairID): void;
+    getUp(player: PlayerID, fromChair: number): void;
 
     canBeClosed(): boolean;
 

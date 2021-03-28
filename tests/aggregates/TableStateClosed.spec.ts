@@ -1,14 +1,12 @@
 import { TableStateClosed } from '../../src/domain/aggregates/impl/TableStateClosed';
 import { TableNotAvailableException } from '../../src/domain/exceptions/TableNotAvailableException';
 import { PlayerID } from '../../src/domain/value_objects/PlayerID';
-import { ChairID } from '../../src/domain/value_objects/ChairID';
-import { TableID } from '../../src/domain/value_objects/TableID';
 
 describe('TableStateClosed', () => {
     const tableState = new TableStateClosed();
     const tableNotAvailableException = new TableNotAvailableException();
     const john = new PlayerID('john');
-    const chairId = new ChairID(1, new TableID(1));
+    const chairId = 1;
 
     it('does not allow to be closed', () => {
         expect(tableState.canBeClosed()).toBeFalse();

@@ -1,19 +1,18 @@
 import { TableState } from '../TableState';
 import { PlayerID } from '../../value_objects/PlayerID';
-import { ChairID } from '../../value_objects/ChairID';
 import { TableNotAvailableException } from '../../exceptions/TableNotAvailableException';
 
 export class TableStateClosed implements TableState {
-
-    public getUp(player: PlayerID, fromChair: ChairID): void {
-        throw new TableNotAvailableException();
-    }
 
     public occupy(): void {
         throw new TableNotAvailableException();
     }
 
-    public sit(player: PlayerID, toChair: ChairID): void {
+    public sit(player: PlayerID, toChair: number): void {
+        throw new TableNotAvailableException();
+    }
+
+    public getUp(player: PlayerID, fromChair: number): void {
         throw new TableNotAvailableException();
     }
 
