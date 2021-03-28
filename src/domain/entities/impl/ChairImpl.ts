@@ -1,26 +1,24 @@
 import { AbstractEntity, Event, Optional } from '@darkbyte/herr';
 import { Chair } from '../Chair';
 import { PlayerID } from '../../value_objects/PlayerID';
-import { ChairID } from '../../value_objects/ChairID';
 import { ChairNotAvailableException } from '../../exceptions/ChairNotAvailableException';
 import { PlayerSatToChair } from '../../events/PlayerSatToChair';
-import { TableID } from '../../value_objects/TableID';
 import { PlayerLeftChair } from '../../events/PlayerLeftChair';
 import { TableOccupied } from '../../events/TableOccupied';
+import { ChairNotOccupiedException } from '../../exceptions/ChairNotOccupiedException';
 
 export class ChairImpl extends AbstractEntity implements Chair {
     private currentPlayer?: PlayerID;
 
     constructor(
-        private readonly id: ChairID
+        private readonly chairNumber: number
     ) {
         super();
     }
 
     private eventIsAboutThisChair(event: Event): boolean {
         const chairId = event.getPayload()['chair'];
-        const tableId = new TableID(event.getPayload()['id']);
-        return this.id.isEqualTo(new ChairID(chairId, tableId));
+        return this.chairNumber === chairId;
     }
 
     private isOccupied(): boolean {
@@ -36,7 +34,7 @@ export class ChairImpl extends AbstractEntity implements Chair {
     }
 
     private handleTableOccupiedEvent(event: Event): void {
-        if (this.id.asNumber() === 0) {
+        if (this.chairNumber === 0) {
             this.currentPlayer = new PlayerID(event.getPayload()['player']);
         }
     }
@@ -75,8 +73,8 @@ export class ChairImpl extends AbstractEntity implements Chair {
         return this.currentPlayer;
     }
 
-    public getId(): any {
-        return this.id;
+    public getId(): number {
+        return this.chairNumber;
     }
 
     public sit(player: PlayerID): void {
@@ -87,7 +85,7 @@ export class ChairImpl extends AbstractEntity implements Chair {
 
     public getUp(player: PlayerID): void {
         if (!this.isOccupiedBy(player)) {
-            throw new ChairNotAvailableException();
+            throw new ChairNotOccupiedException();
         }
     }
 

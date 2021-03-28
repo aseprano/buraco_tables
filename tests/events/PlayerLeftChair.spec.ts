@@ -16,7 +16,7 @@ describe("PlayerLeftChair", () => {
         expect(event.getName()).toEqual(PlayerLeftChair.EventName);
 
         expect(event.getPayload()).toEqual({
-            id: 1,
+            table: 1,
             player: 'johndoe',
             chair: 2,
         });

@@ -7,15 +7,16 @@ import { ChairNotAvailableException } from '../../src/domain/exceptions/ChairNot
 import { PlayerLeftChair } from '../../src/domain/events/PlayerLeftChair';
 import { TableOccupied } from '../../src/domain/events/TableOccupied';
 import { GamePolicySpecification, TYPE_ROUNDS } from '../../src/domain/value_objects/GamePolicySpecification';
+import { ChairNotOccupiedException } from '../../src/domain/exceptions/ChairNotOccupiedException';
 
 describe('ChairImpl', () => {
 
-    function createChair(chairNumber = 1, tableId = 111): ChairImpl {
-        return new ChairImpl(new ChairID(chairNumber, new TableID(tableId)));
+    function createChair(chairNumber = 1): ChairImpl {
+        return new ChairImpl(chairNumber);
     }
 
     it('returns its id', () => {
-        const chairId = new ChairID(3, new TableID(111));
+        const chairId = 3;
         const chair = new ChairImpl(chairId);
         expect(chair.getId()).toEqual(chairId);
     });
@@ -26,20 +27,20 @@ describe('ChairImpl', () => {
     })
 
     it('marks as occupied when the relative event is applied', () => {
-        const chair = createChair(1, 111);
+        const chair = createChair(1);
         chair.applyEvent(new PlayerSatToChair(new PlayerID('john'), new ChairID(1, new TableID(111))));
         expect(chair.getCurrentPlayer()).toEqual(new PlayerID('john'));
     });
 
     it('marks as free when an event says that its occupant did sit to another chair', () => {
-        const chair = createChair(1, 111);
+        const chair = createChair(1);
         chair.applyEvent(new PlayerSatToChair(new PlayerID('john'), new ChairID(1, new TableID(111))));
         chair.applyEvent(new PlayerSatToChair(new PlayerID('john'), new ChairID(0, new TableID(111))));
         expect(chair.getCurrentPlayer()).toBeUndefined();
     });
 
     it('does not remove the occupant if the applied event is not about the occupant', () => {
-        const chair = createChair(1, 111);
+        const chair = createChair(1);
         chair.applyEvent(new PlayerSatToChair(new PlayerID('john'), new ChairID(1, new TableID(111))));
         chair.applyEvent(new PlayerSatToChair(new PlayerID('mark'), new ChairID(0, new TableID(111))));
         expect(chair.getCurrentPlayer()).toEqual(new PlayerID('john'));
@@ -53,7 +54,7 @@ describe('ChairImpl', () => {
     it('does not throw if the same occupant sits to the chair again', () => {
         const john = new PlayerID('john');
 
-        const chair = createChair(1, 111);
+        const chair = createChair(1);
         chair.applyEvent(new PlayerSatToChair(john, new ChairID(1, new TableID(111))));
         expect(() => chair.sit(john)).not.toThrow();
     });
@@ -62,7 +63,7 @@ describe('ChairImpl', () => {
         const john = new PlayerID('john');
         const mike = new PlayerID('mike');
 
-        const chair = createChair(1, 111);
+        const chair = createChair(1);
         chair.applyEvent(new PlayerSatToChair(john, new ChairID(1, new TableID(111))));
         expect(() => chair.sit(mike)).toThrow(new ChairNotAvailableException());
     });
@@ -70,7 +71,7 @@ describe('ChairImpl', () => {
     it('allows an user to get up', () => {
         const john = new PlayerID('john');
 
-        const chair = createChair(1, 111);
+        const chair = createChair(1);
         chair.applyEvent(new PlayerSatToChair(john, new ChairID(1, new TableID(111))));
         expect(() => chair.getUp(john)).not.toThrow();
     });
@@ -82,12 +83,12 @@ describe('ChairImpl', () => {
             .toThrow(new ChairNotAvailableException());
     });
 
-    it('throws an error if getting up from a chair occupied by someone else', () => {
-        const chair = createChair(1, 111);
+    it('throws an error if trying to get up an user from a chair occupied by another user', () => {
+        const chair = createChair(1);
         chair.applyEvent(new PlayerSatToChair(new PlayerID('mike'), new ChairID(1, new TableID(111))));
 
         expect(() => chair.getUp(new PlayerID('john')))
-            .toThrow(new ChairNotAvailableException());
+            .toThrow(new ChairNotOccupiedException());
     });
 
     it('removes the user from the chair if the relative PlayerLeftChair event is processed', () => {
@@ -98,14 +99,14 @@ describe('ChairImpl', () => {
     });
 
     it('ignores the PlayerLeftChair event for different user', () => {
-        const chair = createChair(1, 123);
+        const chair = createChair(1);
         chair.applyEvent(new PlayerSatToChair(new PlayerID('mike'), new ChairID(1, new TableID(123))));
         chair.applyEvent(new PlayerLeftChair(new PlayerID('john'), new ChairID(1, new TableID(123))));
         expect(chair.getCurrentPlayer()).toEqual(new PlayerID('mike'));
     });
 
     it('sets the player when table is occupied and chair id is zero', () => {
-        const chair = createChair(0, 123);
+        const chair = createChair(0);
 
         chair.applyEvent(
             new TableOccupied(
@@ -120,7 +121,7 @@ describe('ChairImpl', () => {
     });
 
     it('ignores the TableOccupied event if chair id is not zero', () => {
-        const chair = createChair(1, 123);
+        const chair = createChair(1);
 
         chair.applyEvent(
             new TableOccupied(
