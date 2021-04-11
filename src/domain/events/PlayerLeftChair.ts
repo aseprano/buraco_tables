@@ -1,6 +1,6 @@
 import { DomainEvent } from './DomainEvent';
 import { PlayerID } from '../value_objects/PlayerID';
-import { ChairID } from '../value_objects/ChairID';
+import { TableID } from '../value_objects/TableID';
 
 const EventName = 'com.herrdoktor.buraco.events.PlayerLeftChair';
 
@@ -9,14 +9,15 @@ export class PlayerLeftChair extends DomainEvent {
 
     constructor(
         player: PlayerID,
-        chair: ChairID,
+        tableId: TableID,
+        chairNumber: number,
     ) {
         super();
 
         this.setPayload({
-            table: chair.getTableID().asNumber(),
+            table: tableId.asNumber(),
             player: player.asString(),
-            chair: chair.asNumber(),
+            chair: chairNumber,
         });
     }
 
