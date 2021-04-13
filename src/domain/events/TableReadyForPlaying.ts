@@ -12,7 +12,7 @@ export class TableReadyForPlaying extends DomainEvent {
         super();
 
         this.setPayload({
-            table: table.asNumber(),
+            id: table.asNumber(),
         });
     }
 

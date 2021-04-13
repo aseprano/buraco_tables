@@ -9,7 +9,7 @@ describe('TableReadyForPlaying', () => {
         const event = new TableReadyForPlaying(new TableID(123));
         expect(event.getName()).toEqual(TableReadyForPlaying.EventName);
         expect(event.getPayload()).toEqual({
-            table: 123,
+            id: 123,
         });
     });
 
