@@ -2,6 +2,7 @@ import { TableState } from '../TableState';
 import { PlayerID } from '../../value_objects/PlayerID';
 import { TableNotAvailableException } from '../../exceptions/TableNotAvailableException';
 import { TableAlreadyOpenedException } from '../../exceptions/TableAlreadyOpenedException';
+import { ChairNotAvailableException } from '../../exceptions/ChairNotAvailableException';
 
 export class TableStateIdle implements TableState {
 
@@ -27,4 +28,7 @@ export class TableStateIdle implements TableState {
         throw new TableNotAvailableException();
     }
 
+    public setReady(player: PlayerID): void {
+        throw new ChairNotAvailableException();
+    }
 }

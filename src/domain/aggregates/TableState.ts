@@ -14,4 +14,5 @@ export interface TableState {
 
     reset(): void;
 
+    setReady(player: PlayerID): void;
 }

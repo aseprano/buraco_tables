@@ -27,4 +27,8 @@ export class TableStateClosed implements TableState {
         throw new TableNotAvailableException();
     }
 
+    public setReady(player: PlayerID) {
+        throw new TableNotAvailableException();
+    }
+
 }

@@ -47,4 +47,7 @@ export class TableStateSitting implements TableState {
         throw new TableNotAvailableException();
     }
 
+    public setReady(player: PlayerID) {
+        throw new ChairNotAvailableException();
+    }
 }

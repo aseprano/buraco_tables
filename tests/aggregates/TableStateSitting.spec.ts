@@ -95,4 +95,9 @@ describe('TableStateSitting', () => {
             .toThrow(tableNotAvailableException);
     });
 
+    it('throws TableNotAvailableException when trying to set player ready', () => {
+        expect(() => tableState.setReady(new PlayerID('john')))
+            .toThrow(tableNotAvailableException);
+    });
+
 });
