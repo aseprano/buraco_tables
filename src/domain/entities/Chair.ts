@@ -24,4 +24,8 @@ export interface Chair extends Entity {
      */
     isOccupied(): boolean;
 
+    isOccupiedByPlayer(player: PlayerID): boolean;
+
+    isReady(): boolean;
+
 }

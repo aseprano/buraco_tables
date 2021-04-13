@@ -155,7 +155,7 @@ describe('ChairImpl', () => {
         expect(chair.getCurrentPlayer()).toEqual(new PlayerID('mike'));
     })
 
-    it('marks as ready on PlayerReady event if occupied by that user', () => {
+    it('marks as ready on PlayerReady event if chair is occupied by the ready player', () => {
         const chair = createChair(1);
         chair.setOccupiedBy(new PlayerID('john'));
         chair.applyEvent(new PlayerReady(new TableID(123), new PlayerID('john')));
