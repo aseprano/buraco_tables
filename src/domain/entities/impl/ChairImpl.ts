@@ -6,9 +6,11 @@ import { PlayerSatToChair } from '../../events/PlayerSatToChair';
 import { PlayerLeftChair } from '../../events/PlayerLeftChair';
 import { TableOccupied } from '../../events/TableOccupied';
 import { ChairNotOccupiedException } from '../../exceptions/ChairNotOccupiedException';
+import { PlayerReady } from '../../events/PlayerReady';
 
 export class ChairImpl extends AbstractEntity implements Chair {
     private currentPlayer?: PlayerID;
+    private ready = false;
 
     constructor(
         private readonly chairNumber: number
@@ -17,8 +19,7 @@ export class ChairImpl extends AbstractEntity implements Chair {
     }
 
     private eventIsAboutThisChair(event: Event): boolean {
-        const chairId = event.getPayload()['chair'];
-        return this.chairNumber === chairId;
+        return this.chairNumber === event.getPayload()['chair'];
     }
 
     private isOccupiedBy(playerId: PlayerID|string): boolean {
@@ -37,7 +38,7 @@ export class ChairImpl extends AbstractEntity implements Chair {
 
     private handlePlayerSatToChairEvent(event: Event): void {
         if (this.eventIsAboutThisChair(event)) {
-            this.currentPlayer = new PlayerID(event.getPayload()['player']);
+            this.setOccupiedBy(new PlayerID(event.getPayload()['player']));
         } else if (this.isOccupiedBy(event.getPayload()['player'])) {
             this.currentPlayer = undefined;
         }
@@ -46,6 +47,13 @@ export class ChairImpl extends AbstractEntity implements Chair {
     private handlePlayerLeftChair(event: Event): void {
         if (this.eventIsAboutThisChair(event) && this.isOccupiedBy(event.getPayload()['player'])) {
             this.currentPlayer = undefined;
+            this.ready = false;
+        }
+    }
+
+    private handlePlayerReady(event: Event): void {
+        if (this.isOccupiedBy(event.getPayload()['player'])) {
+            this.ready = true;
         }
     }
 
@@ -62,6 +70,10 @@ export class ChairImpl extends AbstractEntity implements Chair {
             case PlayerLeftChair.EventName:
                 this.handlePlayerLeftChair(event);
                 break;
+
+            case PlayerReady.EventName:
+                this.handlePlayerReady(event);
+                break;
         }
     }
 
@@ -71,6 +83,10 @@ export class ChairImpl extends AbstractEntity implements Chair {
 
     public getId(): number {
         return this.chairNumber;
+    }
+
+    public setOccupiedBy(player: PlayerID) {
+        this.currentPlayer = player;
     }
 
     public sit(player: PlayerID): void {
@@ -87,6 +103,14 @@ export class ChairImpl extends AbstractEntity implements Chair {
 
     public isOccupied(): boolean {
         return this.currentPlayer !== undefined;
+    }
+
+    public isOccupiedByPlayer(player: PlayerID): boolean {
+        return this.isOccupiedBy(player);
+    }
+
+    public isReady(): boolean {
+        return this.ready;
     }
 
 }

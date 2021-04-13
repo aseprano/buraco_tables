@@ -7,6 +7,7 @@ import { PlayerLeftChair } from '../../src/domain/events/PlayerLeftChair';
 import { TableOccupied } from '../../src/domain/events/TableOccupied';
 import { GamePolicySpecification, TYPE_ROUNDS } from '../../src/domain/value_objects/GamePolicySpecification';
 import { ChairNotOccupiedException } from '../../src/domain/exceptions/ChairNotOccupiedException';
+import { PlayerReady } from '../../src/domain/events/PlayerReady';
 
 describe('ChairImpl', () => {
 
@@ -31,6 +32,8 @@ describe('ChairImpl', () => {
         chair.applyEvent(new PlayerSatToChair(new PlayerID('john'), new TableID(111), 1));
         expect(chair.getCurrentPlayer()).toEqual(new PlayerID('john'));
         expect(chair.isOccupied()).toBeTrue();
+        expect(chair.isOccupiedByPlayer(new PlayerID('john'))).toBeTrue();
+        expect(chair.isOccupiedByPlayer(new PlayerID('mike'))).toBeFalse();
     });
 
     it('marks as free when an event says that its occupant did sit to another chair', () => {
@@ -39,6 +42,7 @@ describe('ChairImpl', () => {
         chair.applyEvent(new PlayerSatToChair(new PlayerID('john'), new TableID(111), 0));
         expect(chair.getCurrentPlayer()).toBeUndefined();
         expect(chair.isOccupied()).toBeFalse();
+        expect(chair.isOccupiedByPlayer(new PlayerID('john'))).toBeFalse();
     });
 
     it('does not remove the occupant if the applied event is not about the occupant', () => {
@@ -138,6 +142,37 @@ describe('ChairImpl', () => {
         );
 
         expect(chair.getCurrentPlayer()).toBeUndefined();
+    });
+
+    it('returns false when asked if ready and is not', () => {
+        const chair = createChair(1);
+        expect(chair.isReady()).toBeFalse();
+    });
+
+    it('can be set as occupied', () => {
+        const chair = createChair(1);
+        chair.setOccupiedBy(new PlayerID('mike'));
+        expect(chair.getCurrentPlayer()).toEqual(new PlayerID('mike'));
+    })
+
+    it('marks as ready on PlayerReady event if occupied by that user', () => {
+        const chair = createChair(1);
+        chair.setOccupiedBy(new PlayerID('john'));
+        chair.applyEvent(new PlayerReady(new TableID(123), new PlayerID('john')));
+        expect(chair.isReady()).toBeTrue();
+    });
+
+    it('ignores the PlayerReady event if not occupied by that user', () => {
+        const chair = createChair(1);
+        chair.setOccupiedBy(new PlayerID('john'));
+        chair.applyEvent(new PlayerReady(new TableID(123), new PlayerID('mike')));
+        expect(chair.isReady()).toBeFalse();
+    });
+
+    it('ignores the PlayerReady event if not occupied by any user', () => {
+        const chair = createChair(1);
+        chair.applyEvent(new PlayerReady(new TableID(123), new PlayerID('mike')));
+        expect(chair.isReady()).toBeFalse();
     });
 
 });
