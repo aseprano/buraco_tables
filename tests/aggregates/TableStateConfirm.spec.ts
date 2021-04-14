@@ -70,6 +70,4 @@ describe('TableStateConfirm', () => {
             .not.toThrow();
     });
 
-    it('')
-
 });
