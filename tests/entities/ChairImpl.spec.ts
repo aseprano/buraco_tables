@@ -175,4 +175,12 @@ describe('ChairImpl', () => {
         expect(chair.isReady()).toBeFalse();
     });
 
+    it('clears the ready flag when a user gets up', () => {
+        const chair = createChair(1);
+        chair.setOccupiedBy(new PlayerID('mike'));
+        chair.applyEvent(new PlayerReady(new TableID(123), new PlayerID('mike')));
+        chair.applyEvent(new PlayerLeftChair(new PlayerID('john'), new TableID(123), 2));
+        expect(chair.isReady()).toBeFalse();
+    });
+
 });
