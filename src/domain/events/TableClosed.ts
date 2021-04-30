@@ -4,7 +4,7 @@ import { TableID } from '../value_objects/TableID';
 const EventName = 'com.herrdoktor.buraco.events.TableClosed';
 
 export class TableClosed extends DomainEvent {
-    static readonly EventName = EventName;
+    public static readonly EventName = EventName;
 
     constructor(
         tableId: TableID

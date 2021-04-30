@@ -3,12 +3,10 @@ import { TableID } from '../value_objects/TableID';
 
 const EventName = 'com.herrdoktor.buraco.events.TableNoMoreFlaggedToBeClosed';
 
-export class TableNoMoreFlaggedToBeClosed extends DomainEvent {
+export class TableNoMoreFlaggedToBeClosed extends DomainEvent{
     public static readonly EventName = EventName;
 
-    constructor(
-        id: TableID
-    ) {
+    public constructor(id: TableID) {
         super();
 
         this.setPayload({
@@ -19,5 +17,4 @@ export class TableNoMoreFlaggedToBeClosed extends DomainEvent {
     public getName(): string {
         return EventName;
     }
-
 }

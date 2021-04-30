@@ -4,6 +4,9 @@ import { TablesRepository } from '../../repositories/TablesRepository';
 import { TableID } from '../../value_objects/TableID';
 import { TableName } from '../../value_objects/TableName';
 import { TablesManagementService } from '../TablesManagementService';
+import { PlayerID } from '../../value_objects/PlayerID';
+import { ChairID } from '../../value_objects/ChairID';
+import { GamePolicySpecification } from '../../value_objects/GamePolicySpecification';
 
 @Injectable()
 export class TablesManagementServiceImpl extends TablesManagementService {
@@ -31,6 +34,18 @@ export class TablesManagementServiceImpl extends TablesManagementService {
                 table.close();
                 this.tablesRepository.save(table);
             });
+    }
+
+    public getUp(player: PlayerID, fromChair: ChairID): Promise<void> {
+        return Promise.resolve(undefined);
+    }
+
+    public occupy(player: PlayerID, numberOfChairs: number, gamePolicy: GamePolicySpecification): Promise<void> {
+        return Promise.resolve(undefined);
+    }
+
+    public sit(player: PlayerID, toChair: ChairID): Promise<void> {
+        return Promise.resolve(undefined);
     }
 
 }

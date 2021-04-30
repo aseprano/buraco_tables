@@ -47,8 +47,9 @@ export class ChairImpl extends AbstractEntity implements Chair {
     private handlePlayerLeftChair(event: Event): void {
         if (this.eventIsAboutThisChair(event) && this.isOccupiedBy(event.getPayload()['player'])) {
             this.currentPlayer = undefined;
-            this.ready = false;
         }
+
+        this.ready = false;
     }
 
     private handlePlayerReady(event: Event): void {
